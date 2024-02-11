@@ -3,7 +3,7 @@
     <v-row>
       <v-col justify-end>
         <MeanieCounter
-          :is-meanie="isMeanie()"
+          :is-meanie="isMeanie"
           :meanie-counter="state.meanieCounter"
         />
       </v-col>
@@ -127,8 +127,9 @@ onUnmounted(() => {
 const nextImage = () =>
   (state.activeItem = (state.activeItem + 1) % state.catImages.length);
 
+const incrementMeanieCounter = () => state.meanieCounter++;
 const moveButton = () => {
-  state.meanieCounter++;
+  incrementMeanieCounter();
   nextImage();
   const { height, width } = state.windowDimensions;
   const maxTop = height - 100;
@@ -145,10 +146,10 @@ const moveButton = () => {
   };
 };
 
-const isMeanie = () => state.meanieCounter >= 1;
+const isMeanie = computed(() => state.meanieCounter >= 1);
 
 const currentMeanieText = computed(() => {
-  if (isMeanie()) {
+  if (isMeanie.value) {
     const index = (state.meanieCounter - 1) % meanieText.length;
     return meanieText[index];
   }
