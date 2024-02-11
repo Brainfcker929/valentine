@@ -125,11 +125,12 @@ onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
 });
 
+const nextImage = () =>
+  (state.activeItem = (state.activeItem + 1) % state.catImages.length);
+
 const moveButton = () => {
   state.meanieCounter++;
-  console.log(state.meanieCounter);
-  state.activeItem = (state.activeItem + 1) % state.catImages.length;
-
+  nextImage();
   const maxTop = windowHeight.value - 100;
   const maxLeft = windowWidth.value - 100;
 
