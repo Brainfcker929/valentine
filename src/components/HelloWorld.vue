@@ -1,93 +1,111 @@
 <template>
-  <v-row>
-    <v-col justify-end>
-      <v-sheet
-        v-if="isMeanie()"
-        max-height="200"
-        class="pa-3 bg-pink-lighten-4 float-end"
-      >
-        <v-chip color="teal"
-          >Meanie Counter:
-          <v-icon class="float-right" icon="mdi-emoticon-cry-outline"></v-icon>
-          {{ meanieCounter }}</v-chip
+  <div v-if="mainContentVisible">
+    <v-row>
+      <v-col justify-end>
+        <v-sheet
+          v-if="isMeanie()"
+          max-height="200"
+          class="pa-3 bg-pink-lighten-4 float-end"
         >
-      </v-sheet>
-    </v-col>
-  </v-row>
-  <v-container class="fill-height">
-    <v-responsive class="align-center text-center" background-color="primary">
-      <v-row class="d-flex align-center justify-center">
-        <v-col cols="auto">
-          <v-card class="bg-pink-lighten-4" flat>
-            <p class="text-body-2 font-weight-light mb-n1 mt-4 text-pink">
-              Will you be my
+          <v-chip color="teal"
+            >Meanie Counter:
+            <v-icon
+              class="float-right"
+              icon="mdi-emoticon-cry-outline"
+            ></v-icon>
+            {{ meanieCounter }}</v-chip
+          >
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-container class="fill-height">
+      <v-responsive class="align-center text-center" background-color="primary">
+        <v-row class="d-flex align-center justify-center">
+          <v-col cols="auto">
+            <v-card class="bg-pink-lighten-4" flat>
+              <p class="text-body-2 font-weight-light mb-n1 mt-4 text-pink">
+                Will you be my
+              </p>
+              <h1 class="text-h2 font-weight-bold text-pink">Valentine ?</h1>
+            </v-card>
+          </v-col>
+        </v-row>
+        <v-row class="d-flex align-center justify-center mb-8">
+          <v-col>
+            <p class="text-body-2 font-weight-light text-pink">
+              {{ currentMeanieText }}
             </p>
-            <h1 class="text-h2 font-weight-bold text-pink">Valentine ?</h1>
-          </v-card>
-        </v-col>
-      </v-row>
-      <v-row class="d-flex align-center justify-center mb-8">
-        <v-col>
-          <p class="text-body-2 font-weight-light text-pink">
-            {{ currentMeanieText }}
-          </p>
-        </v-col>
-      </v-row>
-      <v-carousel
-        v-model="activeItem"
-        hide-delimiter-background
-        hide-delimiters
-        :show-arrows="false"
-        class="mb-8"
-      >
-        <v-carousel-item
-          v-for="(catImage, index) in catImages"
-          :key="index"
-          :src="catImage"
+          </v-col>
+        </v-row>
+        <v-carousel
+          v-model="activeItem"
+          hide-delimiter-background
+          hide-delimiters
+          :show-arrows="false"
+          class="mb-8"
         >
-        </v-carousel-item>
-      </v-carousel>
-
-      <v-row class="d-flex align-center justify-center">
-        <v-col cols="auto">
-          <v-btn
-            color="green darken-2"
-            min-width="228"
-            rel="noopener noreferrer"
-            size="x-large"
-            target="_blank"
-            variant="flat"
+          <v-carousel-item
+            v-for="(catImage, index) in catImages"
+            :key="index"
+            :src="catImage"
           >
-            <v-icon icon="mdi-heart-outline" size="large" start />
+          </v-carousel-item>
+        </v-carousel>
 
-            Yes
-          </v-btn>
-        </v-col>
-        <v-col cols="auto">
-          <v-btn
-            :style="btnStyle"
-            color="red darken-4"
-            min-width="228"
-            rel="noopener noreferrer"
-            size="x-large"
-            target="_blank"
-            variant="flat"
-            @click="moveButton"
-          >
-            <v-tooltip activator="parent" location="top"
-              >Dont be a meanie papini
-            </v-tooltip>
-            <v-icon icon="mdi-heart-broken-outline" size="large" start />
-            NO
-          </v-btn>
+        <v-row class="d-flex align-center justify-center">
+          <v-col cols="auto">
+            <v-btn
+              color="green darken-2"
+              min-width="228"
+              rel="noopener noreferrer"
+              size="x-large"
+              target="_blank"
+              variant="flat"
+              @click="onYesClick"
+            >
+              <v-icon icon="mdi-heart-outline" size="large" start />
+
+              Yes
+            </v-btn>
+          </v-col>
+          <v-col cols="auto">
+            <v-btn
+              :style="btnStyle"
+              color="red darken-4"
+              min-width="228"
+              rel="noopener noreferrer"
+              size="x-large"
+              target="_blank"
+              variant="flat"
+              @click="moveButton"
+            >
+              <v-tooltip activator="parent" location="top"
+                >Dont be a meanie papini
+              </v-tooltip>
+              <v-icon icon="mdi-heart-broken-outline" size="large" start />
+              NO
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-responsive>
+    </v-container>
+  </div>
+  <div v-else class="d-flex align-center justify-center" style="height: 100vh">
+    <v-container>
+      <v-row justify="center">
+        <v-col cols="auto" class="text-center">
+          <h1 class="text-h2 font-weight-bold text-pink">I love you too</h1>
+          <h1 class="text-h2 font-weight-bold text-pink">👉 👈</h1>
         </v-col>
       </v-row>
-    </v-responsive>
-  </v-container>
+    </v-container>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue";
+
+const mainContentVisible = ref(true);
 
 const generateCatImagesArray = (index: number) => {
   const basePath = "/cats/cat";
@@ -115,6 +133,9 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
+  if (emojiInterval.value) {
+    clearInterval(emojiInterval.value);
+  }
 });
 
 const moveButton = () => {
@@ -158,4 +179,58 @@ const meanieText = [
   "Kayaking solo. Pictured us paddling through life.",
   "Life's co-star role open. I'll rehearse our lines solo.",
 ];
+
+const onYesClick = () => {
+  mainContentVisible.value = false;
+  dropEmojis();
+};
+
+const emojiInterval = ref<number | null>(null);
+
+const dropEmojis = () => {
+  const mainEl = document.querySelector("main") || document.body;
+
+  emojiInterval.value = window.setInterval(() => {
+    createElement(mainEl, "💗");
+    createElement(mainEl, "😍 ");
+    createElement(mainEl, "🥰");
+  }, 200);
+};
+
+const createElement = (mainElement: HTMLElement, emoji: string) => {
+  const element = document.createElement("div");
+  element.classList.add("emoji");
+  element.textContent = emoji;
+  element.style.left = `${Math.random() * 100}%`;
+  element.style.animationDuration = `${Math.random() * 6}s`;
+  element.style.fontSize = "2rem";
+  mainElement.appendChild(element);
+
+  // Entfernen Sie das Herz nach der Animation, um das DOM sauber zu halten
+  element.addEventListener("animationend", () => {
+    element.remove();
+  });
+};
 </script>
+
+<style>
+@keyframes fall {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.emoji {
+  position: fixed;
+  font-size: 2.5rem;
+  top: -1vh;
+  transform: translateY(0);
+  z-index: 9999;
+  animation: fall 0.5s linear forwards;
+}
+</style>
