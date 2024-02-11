@@ -95,6 +95,9 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted, computed } from "vue";
+import { useEmojiDrop } from "@/composables/useEmojiDrop";
+
+const { dropEmojis } = useEmojiDrop();
 
 const mainContentVisible = ref(true);
 
@@ -124,9 +127,6 @@ onMounted(() => {
 
 onUnmounted(() => {
   window.removeEventListener("resize", handleResize);
-  if (emojiInterval.value) {
-    clearInterval(emojiInterval.value);
-  }
 });
 
 const moveButton = () => {
@@ -173,34 +173,7 @@ const meanieText = [
 
 const onYesClick = () => {
   mainContentVisible.value = false;
-  dropEmojis();
-};
-
-const emojiInterval = ref<number | null>(null);
-
-const dropEmojis = () => {
-  const mainEl = document.querySelector("main") || document.body;
-
-  emojiInterval.value = window.setInterval(() => {
-    createElement(mainEl, "💗");
-    createElement(mainEl, "😍 ");
-    createElement(mainEl, "🥰");
-  }, 200);
-};
-
-const createElement = (mainElement: HTMLElement, emoji: string) => {
-  const element = document.createElement("div");
-  element.classList.add("emoji");
-  element.textContent = emoji;
-  element.style.left = `${Math.random() * 100}%`;
-  element.style.animationDuration = `${Math.random() * 6}s`;
-  element.style.fontSize = "2rem";
-  mainElement.appendChild(element);
-
-  // Entfernen Sie das Herz nach der Animation, um das DOM sauber zu halten
-  element.addEventListener("animationend", () => {
-    element.remove();
-  });
+  dropEmojis("main");
 };
 </script>
 

@@ -9,5 +9,6 @@ declare module 'vue' {
   export interface GlobalComponents {
     HelloWorld: typeof import('./src/components/HelloWorld.vue')['default']
     MeanieCounter: typeof import('./src/components/MeanieCounter.vue')['default']
+    ValentineCard: typeof import('./src/components/ValentineCard.vue')['default']
   }
 }
