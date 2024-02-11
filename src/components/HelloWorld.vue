@@ -2,20 +2,10 @@
   <div v-if="mainContentVisible">
     <v-row>
       <v-col justify-end>
-        <v-sheet
-          v-if="isMeanie()"
-          max-height="200"
-          class="pa-3 bg-pink-lighten-4 float-end"
-        >
-          <v-chip color="teal"
-            >Meanie Counter:
-            <v-icon
-              class="float-right"
-              icon="mdi-emoticon-cry-outline"
-            ></v-icon>
-            {{ meanieCounter }}</v-chip
-          >
-        </v-sheet>
+        <MeanieCounter
+          :is-meanie="isMeanie()"
+          :meanie-counter="meanieCounter"
+        />
       </v-col>
     </v-row>
     <v-container class="fill-height">
@@ -39,7 +29,7 @@
         </v-row>
         <v-carousel
           v-model="activeItem"
-          height="300px"
+          height="50vh"
           hide-delimiter-background
           hide-delimiters
           :show-arrows="false"
