@@ -107,14 +107,12 @@ const state = reactive({
   btnStyle: {},
   activeItem: 0,
   catImages: generateCatImagesArray(7),
+  windowDimensions: { width: window.innerWidth, height: window.innerHeight },
 });
 
-const windowWidth = ref(window.innerWidth);
-const windowHeight = ref(window.innerHeight);
-
 const handleResize = () => {
-  windowWidth.value = window.innerWidth;
-  windowHeight.value = window.innerHeight;
+  state.windowDimensions.width = window.innerWidth;
+  state.windowDimensions.height = window.innerHeight;
 };
 
 onMounted(() => {
@@ -131,8 +129,9 @@ const nextImage = () =>
 const moveButton = () => {
   state.meanieCounter++;
   nextImage();
-  const maxTop = windowHeight.value - 100;
-  const maxLeft = windowWidth.value - 100;
+  const { height, width } = state.windowDimensions;
+  const maxTop = height - 100;
+  const maxLeft = width - 100;
 
   const top = Math.random() * maxTop;
   const left = Math.random() * maxLeft;
