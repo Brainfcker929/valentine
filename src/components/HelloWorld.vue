@@ -94,12 +94,13 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed, reactive } from "vue";
+import { onMounted, onUnmounted, computed, reactive } from "vue";
 import { useEmojiDrop } from "@/composables/useEmojiDrop";
-
+import {
+  generateCatImagesArray,
+  handleWindowResize,
+} from "@/utilities/helpers";
 const { dropEmojis } = useEmojiDrop();
-const generateCatImagesArray = (length: number) =>
-  Array.from({ length }, (_, index) => `/cats/cat${index + 1}.jpg`);
 
 const state = reactive({
   mainContentVisible: true,
@@ -110,17 +111,16 @@ const state = reactive({
   windowDimensions: { width: window.innerWidth, height: window.innerHeight },
 });
 
-const handleResize = () => {
-  state.windowDimensions.width = window.innerWidth;
-  state.windowDimensions.height = window.innerHeight;
-};
-
 onMounted(() => {
-  window.addEventListener("resize", handleResize);
+  window.addEventListener("resize", () =>
+    handleWindowResize(state.windowDimensions)
+  );
 });
 
 onUnmounted(() => {
-  window.removeEventListener("resize", handleResize);
+  window.removeEventListener("resize", () =>
+    handleWindowResize(state.windowDimensions)
+  );
 });
 
 const nextImage = () =>
