@@ -2,29 +2,35 @@
   <v-row>
     <v-col justify-end>
       <v-sheet
-        v-if="meaniCounter >= 1"
+        v-if="isMeanie()"
         max-height="200"
         class="pa-3 bg-pink-lighten-4 float-end"
       >
         <v-chip color="teal"
-          >Meani Counter:
+          >Meanie Counter:
           <v-icon class="float-right" icon="mdi-emoticon-cry-outline"></v-icon>
-          {{ meaniCounter }}</v-chip
+          {{ meanieCounter }}</v-chip
         >
       </v-sheet>
     </v-col>
   </v-row>
   <v-container class="fill-height">
-    <v-responsive
-      class="align-center text-center fill-height"
-      background-color="primary"
-    >
+    <v-responsive class="align-center text-center" background-color="primary">
       <v-row class="d-flex align-center justify-center">
         <v-col cols="auto">
-          <div class="text-body-2 font-weight-light mb-n1 mt-4 text-pink">
-            Will you be my
-          </div>
-          <h1 class="text-h2 font-weight-bold text-pink">Valentine ?</h1>
+          <v-card class="bg-pink-lighten-4" flat>
+            <p class="text-body-2 font-weight-light mb-n1 mt-4 text-pink">
+              Will you be my
+            </p>
+            <h1 class="text-h2 font-weight-bold text-pink">Valentine ?</h1>
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row class="d-flex align-center justify-center mb-8">
+        <v-col>
+          <p class="text-body-2 font-weight-light text-pink">
+            {{ currentMeanieText }}
+          </p>
         </v-col>
       </v-row>
       <v-carousel
@@ -32,6 +38,7 @@
         hide-delimiter-background
         hide-delimiters
         :show-arrows="false"
+        class="mb-8"
       >
         <v-carousel-item
           v-for="(catImage, index) in catImages"
@@ -80,7 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from "vue";
+import { ref, onMounted, onUnmounted, computed } from "vue";
 
 const generateCatImagesArray = (index: number) => {
   const basePath = "/cats/cat";
@@ -91,7 +98,7 @@ const generateCatImagesArray = (index: number) => {
 };
 const catImages = generateCatImagesArray(7);
 
-let meaniCounter = ref(0);
+let meanieCounter = ref(0);
 const btnStyle = ref({});
 const activeItem = ref(0);
 const windowWidth = ref(window.innerWidth);
@@ -111,7 +118,7 @@ onUnmounted(() => {
 });
 
 const moveButton = () => {
-  meaniCounter.value++;
+  meanieCounter.value++;
   activeItem.value = (activeItem.value + 1) % catImages.length;
 
   const maxTop = windowHeight.value - 100;
@@ -127,4 +134,28 @@ const moveButton = () => {
     transition: "all 0.5s ease",
   };
 };
+
+const isMeanie = () => meanieCounter.value >= 1;
+
+const currentMeanieText = computed(() => {
+  if (isMeanie()) {
+    const index = (meanieCounter.value - 1) % meanieText.length;
+    return meanieText[index];
+  }
+  return "";
+});
+
+const meanieText = [
+  "Im gonna cry.",
+  "Guess you're not into good guys after all.",
+  "Guess it's spaghetti for one. Was perfecting your portrait.",
+  "Your loss, I'm one of the rare ones.",
+  "Too bad, I thought you were different.",
+  "Shame, I thought we could have had something special.",
+  "Guess it's spaghetti for one. Was perfecting your portrait.",
+  "Love poems to the mirror. It's a very forgiving audience.",
+  "Shadow and I, dancing alone. We miss your moves.",
+  "Kayaking solo. Pictured us paddling through life.",
+  "Life's co-star role open. I'll rehearse our lines solo.",
+];
 </script>
