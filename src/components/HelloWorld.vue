@@ -21,7 +21,7 @@
     <v-container class="fill-height">
       <v-responsive class="align-center text-center" background-color="primary">
         <v-row class="d-flex align-center justify-center">
-          <v-col cols="auto">
+          <v-col cols="12">
             <v-card class="bg-pink-lighten-4" flat>
               <p class="text-body-2 font-weight-light mb-n1 mt-4 text-pink">
                 Will you be my
@@ -30,8 +30,8 @@
             </v-card>
           </v-col>
         </v-row>
-        <v-row class="d-flex align-center justify-center mb-8">
-          <v-col>
+        <v-row class="d-flex align-center justify-center">
+          <v-col cols="12" sm="8" md="6">
             <p class="text-body-2 font-weight-light text-pink">
               {{ currentMeanieText }}
             </p>
@@ -39,6 +39,7 @@
         </v-row>
         <v-carousel
           v-model="activeItem"
+          height="300px"
           hide-delimiter-background
           hide-delimiters
           :show-arrows="false"
@@ -56,7 +57,7 @@
           <v-col cols="auto">
             <v-btn
               color="green darken-2"
-              min-width="228"
+              min-width="2rem"
               rel="noopener noreferrer"
               size="x-large"
               target="_blank"
@@ -72,7 +73,7 @@
             <v-btn
               :style="btnStyle"
               color="red darken-4"
-              min-width="228"
+              min-width="2rem"
               rel="noopener noreferrer"
               size="x-large"
               target="_blank"
