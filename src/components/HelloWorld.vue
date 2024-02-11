@@ -1,10 +1,10 @@
 <template>
-  <div v-if="mainContentVisible">
+  <div v-if="state.mainContentVisible">
     <v-row>
       <v-col justify-end>
         <MeanieCounter
           :is-meanie="isMeanie()"
-          :meanie-counter="meanieCounter"
+          :meanie-counter="state.meanieCounter"
         />
       </v-col>
     </v-row>
@@ -28,7 +28,7 @@
           </v-col>
         </v-row>
         <v-carousel
-          v-model="activeItem"
+          v-model="state.activeItem"
           height="50vh"
           hide-delimiter-background
           hide-delimiters
@@ -36,7 +36,7 @@
           class="mb-8"
         >
           <v-carousel-item
-            v-for="(catImage, index) in catImages"
+            v-for="(catImage, index) in state.catImages"
             :key="index"
             :src="catImage"
           >
@@ -61,7 +61,7 @@
           </v-col>
           <v-col cols="auto">
             <v-btn
-              :style="btnStyle"
+              :style="state.btnStyle"
               color="red darken-4"
               min-width="2rem"
               rel="noopener noreferrer"
@@ -94,25 +94,21 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, computed } from "vue";
+import { ref, onMounted, onUnmounted, computed, reactive } from "vue";
 import { useEmojiDrop } from "@/composables/useEmojiDrop";
 
 const { dropEmojis } = useEmojiDrop();
+const generateCatImagesArray = (length: number) =>
+  Array.from({ length }, (_, index) => `/cats/cat${index + 1}.jpg`);
 
-const mainContentVisible = ref(true);
+const state = reactive({
+  mainContentVisible: true,
+  meanieCounter: 0,
+  btnStyle: {},
+  activeItem: 0,
+  catImages: generateCatImagesArray(7),
+});
 
-const generateCatImagesArray = (index: number) => {
-  const basePath = "/cats/cat";
-  return Array.from(
-    { length: index },
-    (_, index) => `${basePath}${index + 1}.jpg`
-  );
-};
-const catImages = generateCatImagesArray(7);
-
-let meanieCounter = ref(0);
-const btnStyle = ref({});
-const activeItem = ref(0);
 const windowWidth = ref(window.innerWidth);
 const windowHeight = ref(window.innerHeight);
 
@@ -130,8 +126,9 @@ onUnmounted(() => {
 });
 
 const moveButton = () => {
-  meanieCounter.value++;
-  activeItem.value = (activeItem.value + 1) % catImages.length;
+  state.meanieCounter++;
+  console.log(state.meanieCounter);
+  state.activeItem = (state.activeItem + 1) % state.catImages.length;
 
   const maxTop = windowHeight.value - 100;
   const maxLeft = windowWidth.value - 100;
@@ -139,7 +136,7 @@ const moveButton = () => {
   const top = Math.random() * maxTop;
   const left = Math.random() * maxLeft;
 
-  btnStyle.value = {
+  state.btnStyle = {
     position: "fixed",
     top: `${top}px`,
     left: `${left}px`,
@@ -147,11 +144,11 @@ const moveButton = () => {
   };
 };
 
-const isMeanie = () => meanieCounter.value >= 1;
+const isMeanie = () => state.meanieCounter >= 1;
 
 const currentMeanieText = computed(() => {
   if (isMeanie()) {
-    const index = (meanieCounter.value - 1) % meanieText.length;
+    const index = (state.meanieCounter - 1) % meanieText.length;
     return meanieText[index];
   }
   return "";
@@ -172,7 +169,7 @@ const meanieText = [
 ];
 
 const onYesClick = () => {
-  mainContentVisible.value = false;
+  state.mainContentVisible = false;
   dropEmojis("main");
 };
 </script>
