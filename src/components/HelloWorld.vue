@@ -128,6 +128,7 @@ const nextImage = () =>
   (state.activeItem = (state.activeItem + 1) % state.catImages.length);
 
 const incrementMeanieCounter = () => state.meanieCounter++;
+
 const moveButton = () => {
   incrementMeanieCounter();
   nextImage();
@@ -149,11 +150,9 @@ const moveButton = () => {
 const isMeanie = computed(() => state.meanieCounter >= 1);
 
 const currentMeanieText = computed(() => {
-  if (isMeanie.value) {
-    const index = (state.meanieCounter - 1) % meanieText.length;
-    return meanieText[index];
-  }
-  return "";
+  return isMeanie.value
+    ? meanieText[(state.meanieCounter - 1) % meanieText.length]
+    : "";
 });
 
 const onYesClick = () => {
